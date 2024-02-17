@@ -4,7 +4,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import google.generativeai as genai
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
@@ -55,8 +55,7 @@ def get_conversational_chain():
     Answer:
     """
 
-    model = ChatGoogleGenerativeAI(model="gemini-pro",
-                             temperature=0.3)
+    model = ChatGoogleGenerativeAI(model="gemini-pro")
 
     prompt = PromptTemplate(template = prompt_template, input_variables = ["context", "question"])
     chain = load_qa_chain(model, chain_type="stuff", prompt=prompt)
@@ -74,7 +73,7 @@ def user_input(user_question):
     chain = get_conversational_chain()
 
     
-    response = chain(
+    response = chain.invoke(
         {"input_documents":docs, "question": user_question}
         , return_only_outputs=True)
 
